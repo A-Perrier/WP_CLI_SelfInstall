@@ -27,18 +27,13 @@ class WP_CLI_SelfInstall
     {
         echo "\nBienvenue dans l'assistant de configuration WordPress !\n";
         echo "Pour installer WordPress correctement, nous allons devoir répondre à quelques questions.\n\n";
-
-        self::askConfigMode();
-
-        if (self::$config_mode === "1") {
-            self::installWordPressOnly();
-        } elseif (self::$config_mode === "2") {
-            self::installWordPressAndConfigureDatabase();
-        }
+    
+        self::installWordPressOnly();
     }
 
 
     /** 
+     * <! Inutilisée pour le moment !>
      * Récupère le mode de configuration demandé par l'utilisateur.ice
      */
     private static function askConfigMode (): void
@@ -102,17 +97,6 @@ class WP_CLI_SelfInstall
         // On confirme le succès des opérations
         echo "\n\n\n Félicitations ! WordPress est correctement installé et la base de données configurée ! Si vous avez déjà créé votre Virtual Host et rechargé Apache, rendez-vous sur http://" . self::$site_url . " !\n\n\n";
     }
-
-
-
-    /**
-     * Dirige le mode de configuration complet
-     */
-    private static function installWordPressAndConfigureDatabase ()
-    {
-
-    }
-
 
 
     private static function getInstallPath (): void
@@ -277,7 +261,6 @@ class WP_CLI_SelfInstall
         ' --admin_password='    . self::$admin_pass . 
         ' --admin_email='       . self::$admin_email
         ;
-        var_dump('commande :', $command);
         shell_exec($command);
     }
 }
