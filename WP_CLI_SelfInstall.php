@@ -28,7 +28,7 @@ class WP_CLI_SelfInstall
         echo "\nBienvenue dans l'assistant de configuration WordPress !\n";
         echo "Pour installer WordPress correctement, nous allons devoir répondre à quelques questions.\n\n";
     
-        self::installWordPressOnly();
+        self::installWordPressFully();
     }
 
 
@@ -38,13 +38,13 @@ class WP_CLI_SelfInstall
      */
     private static function askConfigMode (): void
     {
-        echo "Tout d'abord, choisissez le mode d'installation : [Par défaut : 1]\n";
+        echo "Tout d'abord, choisissez le mode d'installation : [Par défaut : 2]\n";
         echo " 1 - Créer et installer WordPress uniquement\n";
         echo " 2 - Créer et installer WordPress et générer une base de données MySQL\n";
         $mode = readline(">>> ");
 
         if (strlen($mode) === 0) {
-           $mode = "1";
+           $mode = "2";
         }
 
         if (trim($mode) !== "1" && trim($mode) !== "2") {
@@ -60,7 +60,7 @@ class WP_CLI_SelfInstall
     /**
      * Dirige le mode de configuration d'installation de WordPress seul
      */
-    private static function installWordPressOnly ()
+    private static function installWordPressFully ()
     {
         echo "\n Vous avez choisi l'installation de WordPress uniquement. Voyons ensemble comment créer tout ça\n";
         
@@ -231,7 +231,9 @@ class WP_CLI_SelfInstall
 
     private static function downloadWPCore (): void
     {
-        $command = self::$install_path === null ? self::WP_CORE_DL_COMMAND : self::WP_CORE_DL_COMMAND . '--path=' . self::$install_path;
+        $command = self::$install_path === null ? 
+            self::WP_CORE_DL_COMMAND . ' --locale=' . self::$locale :
+            self::WP_CORE_DL_COMMAND . ' --locale=' . self::$locale .  ' --path=' . self::$install_path;
         shell_exec($command);
     }
 
@@ -240,7 +242,6 @@ class WP_CLI_SelfInstall
     {
         $command = 
             self::WP_CONFIG_COMMAND . 
-            ' --locale=' . self::$locale . 
             ' --dbname=' . self::$db_name .
             ' --dbuser=' . self::$db_user .
             ' --dbpass=' . self::$db_pass . 
